@@ -97,7 +97,6 @@ const ASSET_TYPES = [
   "Keyboard",
   "Mouse",
   "Wi-Fi Router",
-  "Official Mobile Phone",
   "Tablet",
   "Workstation PC",
   "Laser Printer",
@@ -108,9 +107,7 @@ const ASSET_TYPES = [
   "External SSD",
   "Pen Drive",
   "Webcam",
-  "Biometric Attendance Device",
   "LED TV",
-  "Projector",
   "DSLR Camera",
   "Mirrorless Camera",
   "Video Camera / Camcorder",
@@ -126,10 +123,7 @@ const ASSET_TYPES = [
   "Audio Recorder",
   "Live Video Switcher",
   "Streaming Device",
-  "Capture Card",
   "Teleprompter",
-  "Graphic Tablet",
-  "External DVD Writer",
   "Other"
 ];
 
