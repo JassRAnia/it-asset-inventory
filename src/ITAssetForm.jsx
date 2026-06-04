@@ -452,9 +452,6 @@ export default function ITAssetForm() {
       {/* Header */}
       <header className="hdr">
         <div className="header-container">
-          <div className="emblem-container">
-            <span className="emblem-icon">🏛</span>
-          </div>
           <div className="hdr-text">
             <div className="dept">Department of Information & Public Relations, Punjab</div>
             <h1>IT Asset Inventory & Management</h1>
