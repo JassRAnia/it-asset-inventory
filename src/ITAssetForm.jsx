@@ -169,7 +169,7 @@ const emptyAsset = () => ({
 const STEPS = ["Employee Details", "Asset Details", "Review & Submit"];
 
 // Deployed Google Apps Script Web App URL
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRsbTOhf7lipc1dAfHgVfDVJDPZnYh7YhEpLBZd7_VaF_zk4-p6af-xAarTMMVX7YK/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9bnomU3BAOUI1-ryTMKBKxSJJTe0e8ovvdWrioH7R9b9uJlM-GZNTXSVgJPERkGJK8w/exec";
 
 export default function ITAssetForm() {
   const [step, setStep] = useState(0);
