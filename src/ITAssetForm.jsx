@@ -15,8 +15,7 @@ import {
   AlertTriangle, 
   Printer, 
   Download, 
-  CheckCircle,
-  FileSpreadsheet
+  CheckCircle
 } from "lucide-react";
 
 const DISTRICTS = [
@@ -29,67 +28,70 @@ const DISTRICTS = [
 ];
 
 const BRANCHES = [
-  "Accounts",
-  "Advertisement",
+  "ACCOUNTS",
+  "ADVERTISEMENT",
   "CMO",
-  "Director Staff",
+  "DIRECTOR STAFF",
   "DISTRICT",
-  "Electronic Media",
-  "Establishment",
-  "Field",
-  "O/o OSD CM",
-  "O/o SIPR",
-  "O/o DIPR",
-  "O/o ADA",
+  "ELECTRONIC MEDIA",
+  "ESTABLISHMENT",
+  "FIELD",
+  "O/O OSD CM",
+  "O/O SIPR",
+  "O/O DIPR",
+  "O/O ADA",
   "PF",
-  "Press",
-  "Production",
-  "Punmedia",
+  "PRESS",
+  "PRODUCTION",
+  "PUNMEDIA",
   "R&R",
   "RTI",
-  "Social Media",
-  "Steno-ADA",
-  "Store",
-  "Technical",
+  "SOCIAL MEDIA",
+  "STENO-ADA",
+  "STORE",
+  "TECHNICAL",
   "NA",
-  "Other"
+  "OTHER"
 ];
 
 const DESIGNATIONS = [
-  "DCFA",
-  "ADA",
   "AD",
+  "ADA",
   "APRO",
-  "Cashier",
-  "Clerk",
-  "Content Writer",
-  "Data Entry Operator",
+  "CASHIER",
+  "CLERK",
+  "CONTENT WRITER",
+  "DATA ENTRY OPERATOR",
+  "DCFA",
   "DD",
-  "Director Communication",
+  "DIRECTOR COMMUNICATION",
   "DME",
   "DMM",
-  "Graphic Designer",
+  "GRAPHIC DESIGNER",
   "IPRO",
   "JD",
+  "MEDIA ADVISOR",
   "PA/DPR",
-  "Press",
+  "PRESS",
   "R&R",
-  "Secretary",
-  "Sen. Assistant",
-  "Sen. Steno",
-  "SO",
-  "Steno",
-  "Supdt.",
-  "Video Editor",
+  "SECRETARY",
+  "SEN. ASSISTANT",
+  "SEN. STENO",
   "SME",
-  "Media Advisor",
-  "Other"
+  "SO",
+  "STENO",
+  "SUPDT.",
+  "VIDEO EDITOR",
+  "OTHER"
 ];
 
 const ASSET_TYPES = [
   "Laptop",
   "Desktop Computer",
   "All-in-One PC",
+  "APPLE IPAD",
+  "APPLE MACBOOK",
+  "APPLE IMAC",
   "Monitor",
   "UPS",
   "Keyboard",
@@ -147,7 +149,6 @@ const ISSUED_BY_OPTIONS = [
 const CURRENT_LOCATION_OPTIONS = [
   "Head Office",
   "District Office",
-  "Field Office",
   "Residence (WFH/Official Use)",
   "Other"
 ];
@@ -202,11 +203,11 @@ export default function ITAssetForm() {
     setAssets(p => p.length > 1 ? p.filter(a => a.id !== id) : p);
 
   const getFinalDesignation = () => {
-    return employee.designation === "Other" ? employee.customDesignation : employee.designation;
+    return employee.designation === "OTHER" ? employee.customDesignation.toUpperCase() : employee.designation;
   };
 
   const getFinalBranch = () => {
-    return employee.branch === "Other" ? employee.customBranch : employee.branch;
+    return employee.branch === "OTHER" ? employee.customBranch.toUpperCase() : employee.branch;
   };
 
   const validateStep0 = () => {
@@ -221,13 +222,13 @@ export default function ITAssetForm() {
 
     if (!employee.designation) {
       e.designation = "Designation selection is required";
-    } else if (employee.designation === "Other" && !employee.customDesignation.trim()) {
+    } else if (employee.designation === "OTHER" && !employee.customDesignation.trim()) {
       e.customDesignation = "Please specify your Designation";
     }
 
     if (!employee.branch) {
       e.branch = "Branch / Section selection is required";
-    } else if (employee.branch === "Other" && !employee.customBranch.trim()) {
+    } else if (employee.branch === "OTHER" && !employee.customBranch.trim()) {
       e.customBranch = "Please specify your Branch / Section";
     }
 
@@ -356,7 +357,7 @@ export default function ITAssetForm() {
             </div>
             <div className="print-header-only">
               <h3>GOVERNMENT OF PUNJAB</h3>
-              <h4>Department of Public Relations, Punjab</h4>
+              <h4>Department of Information & Public Relations, Punjab</h4>
               <p>IT Asset Inventory Submission Receipt</p>
               <hr />
             </div>
@@ -374,7 +375,7 @@ export default function ITAssetForm() {
                 <div className="receipt-grid">
                   <div><span>Name:</span> <strong>{employee.name}</strong></div>
                   <div><span>Email ID:</span> <strong>{employee.email}</strong></div>
-                  {employee.employeeId && <div><span>Employee ID:</span> <strong>{employee.employeeId}</strong></div>}
+                  {employee.employeeId && <div><span>Employee ID / ID CARD NO:</span> <strong>{employee.employeeId}</strong></div>}
                   <div><span>Designation:</span> <strong>{getFinalDesignation()}</strong></div>
                   <div><span>Branch / Section:</span> <strong>{getFinalBranch()}</strong></div>
                   <div><span>District Office:</span> <strong>{employee.district}</strong></div>
@@ -421,7 +422,7 @@ export default function ITAssetForm() {
               </div>
             </div>
 
-            <p className="note no-print">Please save or print this receipt for service records and AMC audit reference. A verification copy will also be archived by the IT Cell.</p>
+            <p className="note no-print">Please save or print this receipt for service records reference. A verification copy will also be archived by the IT Cell.</p>
             
             <div className="receipt-actions no-print">
               <button className="btn-action btn-print" onClick={handlePrint}>
@@ -455,9 +456,8 @@ export default function ITAssetForm() {
             <span className="emblem-icon">🏛</span>
           </div>
           <div className="hdr-text">
-            <div className="dept">Department of Public Relations, Punjab</div>
+            <div className="dept">Department of Information & Public Relations, Punjab</div>
             <h1>IT Asset Inventory & Management</h1>
-            <div className="subtitle">Annual Maintenance Contract (AMC) & Lifecyle Verification Portal</div>
           </div>
         </div>
       </header>
@@ -467,7 +467,7 @@ export default function ITAssetForm() {
         <div className="notice-banner">
           <div className="notice-icon">⚠️</div>
           <div className="notice-text">
-            <strong>Mandatory Directive:</strong> Under the authority of the IT Management Cell, all officers and staff are required to submit accurate records of IT assets assigned to them. Accurate filing facilitates technical support planning, hardware diagnostics, and inclusion in the upcoming Annual Maintenance Contract (AMC) cycle.
+            <strong>Mandatory Directive:</strong> All officers and staff are required to submit accurate records of IT assets assigned to them.
           </div>
         </div>
       </div>
@@ -507,7 +507,7 @@ export default function ITAssetForm() {
                   <input 
                     value={employee.name} 
                     onChange={e => updateEmployee("name", e.target.value)} 
-                    placeholder="Enter name as per service book" 
+                    placeholder="Enter name" 
                   />
                 </div>
                 <FieldError name="name" />
@@ -528,7 +528,7 @@ export default function ITAssetForm() {
               </div>
 
               <div className="field">
-                <label>Employee ID / Service ID <span className="opt">(Optional)</span></label>
+                <label>Employee ID / ID CARD NO <span className="opt">(Optional)</span></label>
                 <div className="input-with-icon">
                   <Hash className="input-icon" size={16} />
                   <input 
@@ -551,7 +551,7 @@ export default function ITAssetForm() {
                 <FieldError name="designation" />
               </div>
 
-              {employee.designation === "Other" && (
+              {employee.designation === "OTHER" && (
                 <div className="field">
                   <label>Specify Designation <span className="req">*</span></label>
                   <input 
@@ -575,7 +575,7 @@ export default function ITAssetForm() {
                 <FieldError name="branch" />
               </div>
 
-              {employee.branch === "Other" && (
+              {employee.branch === "OTHER" && (
                 <div className="field">
                   <label>Specify Branch / Section <span className="req">*</span></label>
                   <input 
@@ -758,7 +758,7 @@ export default function ITAssetForm() {
               <div className="review-grid">
                 <div><span>Full Name:</span> <strong>{employee.name}</strong></div>
                 <div><span>Email ID:</span> <strong>{employee.email}</strong></div>
-                <div><span>Employee ID:</span> <strong>{employee.employeeId || "Not Provided"}</strong></div>
+                <div><span>Employee ID / ID CARD NO:</span> <strong>{employee.employeeId || "Not Provided"}</strong></div>
                 <div><span>Designation:</span> <strong>{getFinalDesignation()}</strong></div>
                 <div><span>Branch / Section:</span> <strong>{getFinalBranch()}</strong></div>
                 <div><span>District Office:</span> <strong>{employee.district}</strong></div>
@@ -842,8 +842,7 @@ export default function ITAssetForm() {
       </main>
 
       <footer className="footer-credits">
-        <p>Department of Public Relations (DIPR), Government of Punjab</p>
-        <p className="sub-credits">IT Asset Lifecycle Management &amp; Audit Portal. For administrative support, contact the IT Cell.</p>
+        <p>Department of Information & Public Relations (DIPR), Government of Punjab</p>
       </footer>
     </div>
   );
