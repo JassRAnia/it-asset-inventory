@@ -2,13 +2,14 @@
   <!-- Background Circle -->
   <circle cx="256" cy="256" r="240" fill="#0d2b5e" />
   <circle cx="256" cy="256" r="210" fill="none" stroke="#f0a500" stroke-width="15" />
-  
-  <!-- Temple/Government Building Icon -->
-  <path d="M256 120 L120 220 L392 220 Z" fill="#f0a500" />
-  <rect x="140" y="220" width="232" height="24" fill="#ffffff" rx="5" />
-  <rect x="160" y="254" width="24" height="110" fill="#f0a500" rx="3" />
-  <rect x="216" y="254" width="24" height="110" fill="#f0a500" rx="3" />
-  <rect x="272" y="254" width="24" height="110" fill="#f0a500" rx="3" />
-  <rect x="328" y="254" width="24" height="110" fill="#f0a500" rx="3" />
-  <rect x="120" y="370" width="272" height="30" fill="#ffffff" rx="5" />
+
+  <!-- Computer Icon Inside -->
+  <!-- Monitor Frame -->
+  <rect x="120" y="140" width="272" height="180" rx="15" fill="#ffffff" />
+  <!-- Monitor Screen -->
+  <rect x="135" y="155" width="242" height="130" rx="5" fill="#0d2b5e" />
+  <!-- Monitor Stand -->
+  <rect x="236" y="320" width="40" height="50" fill="#f0a500" />
+  <!-- Monitor Base -->
+  <path d="M180 370 H332 L350 400 H162 Z" fill="#ffffff" />
 </svg>
