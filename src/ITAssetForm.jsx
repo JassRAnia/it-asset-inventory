@@ -170,6 +170,11 @@ export default function ITAssetForm() {
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [employee, setEmployee] = useState({
     name: "",
     email: "",
@@ -204,6 +209,65 @@ export default function ITAssetForm() {
     return employee.branch === "OTHER" ? employee.customBranch.toUpperCase() : employee.branch;
   };
 
+  const sendOtp = () => {
+    if (!employee.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(employee.email)) {
+      setErrors(prev => ({ ...prev, email: "Please enter a valid Email ID to receive the OTP" }));
+      return;
+    }
+    
+    setSendingOtp(true);
+    setErrors(prev => ({ ...prev, email: null }));
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "send_otp", email: employee.email.trim() })
+    })
+    .then(res => res.json())
+    .then(data => {
+      setSendingOtp(false);
+      if (data.status === "otp_sent") {
+        setOtpSent(true);
+        alert("Verification code sent to " + employee.email);
+      } else {
+        alert("Failed to send OTP: " + (data.message || "Unknown error"));
+      }
+    })
+    .catch(err => {
+      setSendingOtp(false);
+      alert("Error connecting to server. Please check your network and try again.");
+      console.error("OTP Send error:", err);
+    });
+  };
+
+  const verifyOtp = () => {
+    if (!otpCode.trim() || otpCode.trim().length !== 6) {
+      alert("Please enter the 6-digit verification code");
+      return;
+    }
+
+    setVerifyingOtp(true);
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "verify_otp", email: employee.email.trim(), otp: otpCode.trim() })
+    })
+    .then(res => res.json())
+    .then(data => {
+      setVerifyingOtp(false);
+      if (data.status === "verified") {
+        setEmailVerified(true);
+        alert("Email verified successfully!");
+      } else {
+        alert("Invalid or expired OTP. Please try again.");
+      }
+    })
+    .catch(err => {
+      setVerifyingOtp(false);
+      alert("Error verifying code. Please try again.");
+      console.error("OTP Verify error:", err);
+    });
+  };
+
   const validateStep0 = () => {
     const e = {};
     if (!employee.name.trim()) e.name = "Full Name is required";
@@ -212,6 +276,8 @@ export default function ITAssetForm() {
       e.email = "Email ID is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(employee.email)) {
       e.email = "Invalid email format";
+    } else if (!emailVerified) {
+      e.email = "Please verify your email address via OTP first";
     }
 
     if (!employee.designation) {
@@ -506,17 +572,66 @@ export default function ITAssetForm() {
 
               <div className="field">
                 <label>Email ID <span className="req">*</span></label>
-                <div className="input-with-icon">
-                  <Mail className="input-icon" size={16} />
-                  <input 
-                    value={employee.email} 
-                    onChange={e => updateEmployee("email", e.target.value)} 
-                    placeholder="username@punjab.gov.in" 
-                    type="email"
-                  />
+                <div className="input-with-icon" style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
+                    <Mail className="input-icon" size={16} />
+                    <input 
+                      value={employee.email} 
+                      onChange={e => updateEmployee("email", e.target.value)} 
+                      placeholder="username@punjab.gov.in" 
+                      type="email"
+                      readOnly={emailVerified}
+                      style={{ paddingLeft: '38px', backgroundColor: emailVerified ? '#f0fdf4' : '' }}
+                    />
+                  </div>
+                  {!emailVerified && (
+                    <button 
+                      type="button"
+                      className="btn-control"
+                      onClick={sendOtp}
+                      disabled={sendingOtp}
+                      style={{ padding: '10px 16px', fontSize: '13px', whiteSpace: 'nowrap', backgroundColor: 'var(--primary-color)', color: 'white', minWidth: '100px' }}
+                    >
+                      {sendingOtp ? "Sending..." : otpSent ? "Resend OTP" : "Send OTP"}
+                    </button>
+                  )}
+                  {emailVerified && (
+                    <span style={{ color: 'var(--success-color)', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 'bold', fontSize: '13px', marginRight: '8px' }}>
+                      <Check size={16} /> Verified
+                    </span>
+                  )}
                 </div>
                 <FieldError name="email" />
               </div>
+
+              {otpSent && !emailVerified && (
+                <div className="field full animate-fade-in" style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', marginTop: '4px' }}>
+                  <label>Enter 6-Digit OTP Code <span className="req">*</span></label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <input 
+                      value={otpCode}
+                      onChange={e => setOtpCode(e.target.value.substring(0, 6))}
+                      placeholder="Enter verification code"
+                      maxLength={6}
+                      type="text"
+                      pattern="\d{6}"
+                      style={{ flex: 1, letterSpacing: '2px', fontWeight: 'bold', textAlign: 'center' }}
+                    />
+                    <button 
+                      type="button"
+                      className="btn-control"
+                      onClick={verifyOtp}
+                      disabled={verifyingOtp}
+                      style={{ padding: '10px 20px', fontSize: '13px', backgroundColor: 'var(--success-color)', color: 'white' }}
+                    >
+                      {verifyingOtp ? "Verifying..." : "Verify Code"}
+                    </button>
+                  </div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                    We sent a 6-digit verification code to <strong>{employee.email}</strong>.
+                  </span>
+                </div>
+              )}
 
               <div className="field">
                 <label>Employee ID / ID CARD NO <span className="opt">(Optional)</span></label>
